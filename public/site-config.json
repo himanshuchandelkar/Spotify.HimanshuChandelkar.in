@@ -3,7 +3,7 @@
   "brand": {
     "domainName": "spotify.HimanshuChandelkar.in",
     "curatorName": "Himanshu Chandelkar",
-    "curatorRole": "Independent Sound Curator",
+    "curatorRole": "Playlist Curator",
     "spotifyHandle": "@31k3rzl2pqg2l5ycjf7pnfzivryi",
     "profileLabel": "Spotify Profile",
     "followersCount": "3",
@@ -17,9 +17,9 @@
   },
   "hero": {
     "kicker": "Updated Weekly",
-    "headlineLead": "Soundtracks built for",
+    "headlineLead": "Playlists built for",
     "headlineItalic": "late hours.",
-    "subheadline": "Every playlist on spotify.mydomain.in is sequenced by hand—spanning midnight electronic drives, warm vinyl soul, brutalist synth architecture, and quiet morning acoustics.",
+    "subheadline": "",
     "heroImageUrl": "/assets/hero_music_studio_1794590606487-DxlthElx.jpg",
     "heroImageCaption": "Listening Room ",
     "actionButtons": [
@@ -33,15 +33,6 @@
         "visible": true
       },
       {
-        "id": "btn_hero_spotify",
-        "label": "Follow on Spotify",
-        "url": "https://open.spotify.com/user/31k3rzl2pqg2l5ycjf7pnfzivryi",
-        "icon": "spotify",
-        "variant": "accent",
-        "actionType": "link",
-        "visible": true
-      },
-      {
         "id": "btn_hero_share",
         "label": "Copy Hub Link",
         "url": "https://spotify.HimanshuChandelkar.in",
@@ -49,11 +40,20 @@
         "variant": "subtle",
         "actionType": "copy_url",
         "visible": true
+      },
+      {
+        "id": "btn_3d34798c",
+        "label": "Visit Main site",
+        "url": "HimanshuChandelkar.in",
+        "icon": "external",
+        "variant": "subtle",
+        "actionType": "link",
+        "visible": true
       }
     ]
   },
   "curator": {
-    "heading": "The Sequencing Philosophy",
+    "heading": "HimanshuChandelkar.in",
     "quote": "“A good playlist feels like a midnight radio broadcast from a room you never want to leave.”",
     "bio": "Instead of letting algorithms flatten every listening session into the same predictable cycle, each collection here follows an arc—opening with texture, building momentum in the middle third, and settling gently by the closing track.",
     "connectHeading": "Direct Links & Listening Channels",
@@ -62,25 +62,16 @@
       {
         "id": "btn_soc_spotify",
         "label": "Spotify Profile",
-        "url": "https://open.spotify.com/",
+        "url": "https://open.spotify.com/user/31k3rzl2pqg2l5ycjf7pnfzivryi",
         "icon": "spotify",
         "variant": "accent",
         "actionType": "link",
         "visible": true
       },
       {
-        "id": "btn_soc_radio",
-        "label": "Browse All Editions",
-        "url": "#playlists",
-        "icon": "radio",
-        "variant": "outline",
-        "actionType": "scroll_playlists",
-        "visible": true
-      },
-      {
         "id": "btn_soc_website",
         "label": "HimanshuChandelkar.in",
-        "url": "https://spotify.HimanshuChandelkar.in",
+        "url": "https://HimanshuChandelkar.in",
         "icon": "globe",
         "variant": "subtle",
         "actionType": "link",
@@ -91,7 +82,7 @@
   "theme": {
     "accentColor": "#1DB954",
     "layoutMode": "bento",
-    "marqueeText": "Midnight Drive · Analog Soul · Concrete Synth · Dawn Acoustic · Curated Weekly",
+    "marqueeText": "Midnight Drive · Analog Soul · Concrete Synth · Dawn Acoustic",
     "showMarquee": true,
     "showStats": true,
     "showCuratorSection": true,
@@ -102,7 +93,7 @@
     {
       "id": "pl_sp_2A43QHqniMRnRXx6Z9JrAG",
       "title": "POV: Missing Her At 3Am",
-      "mood": "Curated",
+      "mood": "3Am",
       "year": "2026",
       "description": "it’s 3:00 am, the room is dark, the world is asleep, and you're stuck in a loop of memories you can't replay in real life. slow hindi indie, soft urdu acoustics, and late-night longing.",
       "curatorNote": "Synced directly from Spotify (Public playlist).",
@@ -439,7 +430,7 @@
     {
       "id": "pl_sp_0SfIydLfI3PtFT1Wrm2O89",
       "title": "Vibes",
-      "mood": "Curated",
+      "mood": "favorite's",
       "year": "2026",
       "description": "If you know,you know. If you don’t, just press play",
       "curatorNote": "Synced directly from Spotify (Public playlist).",
@@ -741,9 +732,9 @@
     {
       "id": "pl_sp_4IsPbzKlhBpWNdC4UiG4yP",
       "title": "Feel Acoustic",
-      "mood": "Curated",
+      "mood": "Acoustic",
       "year": "2026",
-      "description": "Imported from Himanshu Chandelkar's Spotify library (16 tracks).",
+      "description": "Imported from Himanshu Chandelkar's Spotify library (3 tracks).",
       "curatorNote": "Synced directly from Spotify (Public playlist).",
       "coverUrl": "https://mosaic.scdn.co/640/ab67616d00001e02416b3231790cc3f7d55f41fbab67616d00001e028e74dbd447eb11a1155c6623ab67616d00001e02af4760238789f0ec97a712c5ab67616d00001e02c9656c4c0638022af5e38b47",
       "spotifyUrl": "https://open.spotify.com/playlist/4IsPbzKlhBpWNdC4UiG4yP",
