@@ -49,6 +49,13 @@ function normalizeRoute(pathname: string): AppRoute {
   return '/';
 }
 
+function resolveHeroImage(url?: string): string {
+  if (!url || url === '/assets/hero_music_studio_1794590606487-DxlthElx.jpg') {
+    return DEFAULT_SITE_CONFIG.hero.heroImageUrl;
+  }
+  return url;
+}
+
 function loadInitialConfig(): SiteConfig {
   if (typeof window === 'undefined') return DEFAULT_SITE_CONFIG;
   try {
@@ -62,7 +69,11 @@ function loadInitialConfig(): SiteConfig {
       ...DEFAULT_SITE_CONFIG,
       ...parsed,
       brand: { ...DEFAULT_SITE_CONFIG.brand, ...parsed.brand },
-      hero: { ...DEFAULT_SITE_CONFIG.hero, ...parsed.hero },
+      hero: {
+        ...DEFAULT_SITE_CONFIG.hero,
+        ...parsed.hero,
+        heroImageUrl: resolveHeroImage(parsed.hero.heroImageUrl),
+      },
       curator: { ...DEFAULT_SITE_CONFIG.curator, ...(parsed.curator || {}) },
       theme: { ...DEFAULT_SITE_CONFIG.theme, ...parsed.theme },
       playlists: parsed.playlists,
@@ -111,7 +122,11 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
             ...prev,
             ...data,
             brand: { ...prev.brand, ...data.brand },
-            hero: { ...prev.hero, ...data.hero },
+            hero: {
+              ...prev.hero,
+              ...data.hero,
+              heroImageUrl: resolveHeroImage(data.hero.heroImageUrl),
+            },
             curator: { ...prev.curator, ...(data.curator || {}) },
             theme: { ...prev.theme, ...data.theme },
             playlists: data.playlists,
@@ -198,7 +213,11 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
           ...DEFAULT_SITE_CONFIG,
           ...parsed,
           brand: { ...DEFAULT_SITE_CONFIG.brand, ...parsed.brand },
-          hero: { ...DEFAULT_SITE_CONFIG.hero, ...parsed.hero },
+          hero: {
+            ...DEFAULT_SITE_CONFIG.hero,
+            ...parsed.hero,
+            heroImageUrl: resolveHeroImage(parsed.hero.heroImageUrl),
+          },
           curator: { ...DEFAULT_SITE_CONFIG.curator, ...(parsed.curator || {}) },
           theme: { ...DEFAULT_SITE_CONFIG.theme, ...parsed.theme },
           playlists: parsed.playlists,
