@@ -97,6 +97,7 @@ export interface CuratorSectionConfig {
 
 export interface ThemeConfig {
   accentColor: string;
+  faviconUrl: string;
   layoutMode: 'bento' | 'grid';
   marqueeText: string;
   showMarquee: boolean;

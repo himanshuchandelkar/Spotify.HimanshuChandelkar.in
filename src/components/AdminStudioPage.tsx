@@ -28,6 +28,13 @@ import {
 } from '../types/site';
 import { resolveTrackAudioFeatures } from '../utils/audioFeatures';
 import { createId, getContrastTextColor } from '../utils/crypto';
+import {
+  DEFAULT_FAVICON_URL,
+  describeFaviconDataUri,
+  encodeFaviconFile,
+  isDataImageUrl,
+  sanitizeFaviconUrl,
+} from '../utils/favicon';
 import { SpotifyUserProfile } from '../utils/spotifyPkce';
 import { IconGlyph } from './IconGlyph';
 import { ResilientImage } from './ResilientImage';
@@ -85,6 +92,8 @@ export const AdminStudioPage: React.FC = () => {
   const [authStatus, setAuthStatus] = useState<{ ok: boolean; msg: string } | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const faviconFileInputRef = useRef<HTMLInputElement | null>(null);
+  const [faviconProcessing, setFaviconProcessing] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -205,6 +214,26 @@ export const AdminStudioPage: React.FC = () => {
     };
     reader.readAsText(file);
     e.target.value = '';
+  };
+
+  const handleFaviconUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setFaviconProcessing(true);
+    try {
+      const encoded = await encodeFaviconFile(file);
+      setDraft((prev) => ({
+        ...prev,
+        theme: { ...prev.theme, faviconUrl: encoded },
+      }));
+      showToast('Favicon uploaded — click Save Changes to apply', 'info');
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Could not process favicon image.';
+      showToast(msg, 'error');
+    } finally {
+      setFaviconProcessing(false);
+    }
   };
 
   const handleAuthUpdate = async (e: React.FormEvent) => {
@@ -1698,6 +1727,114 @@ export const AdminStudioPage: React.FC = () => {
                     className="w-full h-10 px-3 rounded-lg border border-zinc-800 bg-[#0A0A0D] text-xs text-white"
                   />
                 </div>
+              </div>
+
+              <div className="pt-2 space-y-2">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <label className="block text-xs text-zinc-400">
+                    Favicon (Browser Tab & Apple Touch Icon)
+                  </label>
+                  <span className="text-[11px] font-mono-tabular text-zinc-500">
+                    .svg · .png · .ico · .webp
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg border border-zinc-800 bg-[#0A0A0D] flex items-center justify-center overflow-hidden shrink-0">
+                    <img
+                      src={sanitizeFaviconUrl(draft.theme.faviconUrl)}
+                      alt="Favicon preview"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.src.endsWith(DEFAULT_FAVICON_URL)) {
+                          target.src = DEFAULT_FAVICON_URL;
+                        }
+                      }}
+                      className="w-6 h-6 object-contain rounded"
+                    />
+                  </div>
+
+                  {isDataImageUrl(draft.theme.faviconUrl) ? (
+                    <div className="flex-1 min-w-[220px] h-10 px-3 rounded-lg border border-zinc-800 bg-[#0A0A0D] flex items-center justify-between gap-3">
+                      <span className="text-xs text-zinc-200 truncate">
+                        Uploaded icon embedded ({describeFaviconDataUri(draft.theme.faviconUrl)})
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setDraft((prev) => ({
+                            ...prev,
+                            theme: { ...prev.theme, faviconUrl: '' },
+                          }))
+                        }
+                        className="text-[11px] text-zinc-400 hover:text-white whitespace-nowrap cursor-pointer"
+                      >
+                        Switch to URL
+                      </button>
+                    </div>
+                  ) : (
+                    <input
+                      type="text"
+                      value={draft.theme.faviconUrl || ''}
+                      onChange={(e) =>
+                        setDraft((prev) => ({
+                          ...prev,
+                          theme: { ...prev.theme, faviconUrl: e.target.value },
+                        }))
+                      }
+                      placeholder="Upload a file or paste an icon URL (empty uses default)"
+                      className="flex-1 min-w-[220px] h-10 px-3 rounded-lg border border-zinc-800 bg-[#0A0A0D] text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-zinc-500"
+                    />
+                  )}
+
+                  <input
+                    ref={faviconFileInputRef}
+                    type="file"
+                    accept=".svg,.png,.ico,.webp,image/svg+xml,image/png,image/x-icon,image/vnd.microsoft.icon,image/webp"
+                    onChange={handleFaviconUpload}
+                    className="hidden"
+                  />
+
+                  <button
+                    type="button"
+                    disabled={faviconProcessing}
+                    onClick={() => faviconFileInputRef.current?.click()}
+                    className="inline-flex items-center gap-1.5 px-3.5 h-10 rounded-lg border border-zinc-700 bg-zinc-900 hover:bg-zinc-800 text-xs font-medium text-white whitespace-nowrap cursor-pointer disabled:opacity-50"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>
+                      {faviconProcessing
+                        ? 'Processing...'
+                        : draft.theme.faviconUrl?.trim()
+                        ? 'Replace File'
+                        : 'Upload Image'}
+                    </span>
+                  </button>
+
+                  {draft.theme.faviconUrl?.trim() && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDraft((prev) => ({
+                          ...prev,
+                          theme: { ...prev.theme, faviconUrl: '' },
+                        }));
+                        showToast('Favicon reset to default — click Save Changes to apply', 'info');
+                      }}
+                      className="inline-flex items-center gap-1.5 px-3 h-10 rounded-lg border border-zinc-800 bg-[#0A0A0D] hover:border-rose-500/50 text-xs text-zinc-300 hover:text-rose-300 whitespace-nowrap cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Remove</span>
+                    </button>
+                  )}
+                </div>
+
+                <p className="text-[11px] text-zinc-500">
+                  Uploaded icons are encoded directly into{' '}
+                  <code className="font-mono-tabular text-zinc-400">theme.faviconUrl</code> inside{' '}
+                  <code className="font-mono-tabular text-zinc-400">site-config.json</code> with zero
+                  external dependencies. Removing restores the built-in dark vinyl mark.
+                </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">

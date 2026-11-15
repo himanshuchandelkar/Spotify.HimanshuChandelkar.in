@@ -99,6 +99,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   },
   theme: {
     accentColor: '#1DB954',
+    faviconUrl: '',
     layoutMode: 'bento',
     marqueeText: 'Midnight Drive · Analog Soul · Concrete Synth · Dawn Acoustic',
     showMarquee: true,

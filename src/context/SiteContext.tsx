@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 import { DEFAULT_SITE_CONFIG } from '../data/defaultSiteConfig';
 import { AdminAuthRecord, SiteConfig } from '../types/site';
 import { sha256Hex } from '../utils/crypto';
+import { DEFAULT_FAVICON_URL, detectFaviconMime, sanitizeFaviconUrl } from '../utils/favicon';
 
 const SITE_STORAGE_KEY = 'smd_site_config_v1';
 const AUTH_STORAGE_KEY = 'smd_admin_auth_v1';
@@ -138,11 +139,34 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
   }, []);
 
-  // Sync browser document title & CSS accent variable
+  // Sync browser document title, CSS accent variable, and dynamic favicon
   useEffect(() => {
     document.title = `${config.brand.domainName} — Curated Playlists`;
     document.documentElement.style.setProperty('--accent-color', config.theme.accentColor || '#1DB954');
-  }, [config.brand.domainName, config.theme.accentColor]);
+
+    const resolvedFavicon = sanitizeFaviconUrl(config.theme.faviconUrl);
+    const detectedMime = detectFaviconMime(resolvedFavicon);
+
+    const syncIconLink = (rel: string) => {
+      let linkEl = document.querySelector<HTMLLinkElement>(`link[rel="${rel}"]`);
+      if (!linkEl) {
+        linkEl = document.createElement('link');
+        linkEl.rel = rel;
+        document.head.appendChild(linkEl);
+      }
+      if (rel === 'icon') {
+        if (detectedMime) {
+          linkEl.type = detectedMime;
+        } else {
+          linkEl.removeAttribute('type');
+        }
+      }
+      linkEl.href = resolvedFavicon;
+    };
+
+    syncIconLink('icon');
+    syncIconLink('apple-touch-icon');
+  }, [config.brand.domainName, config.theme.accentColor, config.theme.faviconUrl]);
 
   // Listen to browser back/forward navigation
   useEffect(() => {
